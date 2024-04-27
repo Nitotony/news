@@ -1,10 +1,20 @@
 
+import Footer from "./components/footer"
+import Popular from "./components/popular"
 
 import './App.css'
 
-function App() {
 
-  return <h1 className=" font-bold underline text-cyan-400 m-20">Hello world!</h1>;
+
+import React from 'react'
+
+export default function App() {
+  return (
+
+    <div>
+  
+       <Popular/>
+      
+      </div>
+  )
 }
-
-export default App
