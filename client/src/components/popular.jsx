@@ -3,11 +3,20 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+
 
 const Popular = () => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  
 
+  const handleClick=()=>{
+    
+navigate("/spec-news");
+  }
   async function getNewsData() {
     try {
       let country = "in";
@@ -30,6 +39,8 @@ const Popular = () => {
   useEffect(() => {
     getNewsData();
   }, []);
+  
+
 
   if (loading) {
     return (
@@ -40,44 +51,49 @@ const Popular = () => {
   }
 
   return (
-    <section className="popular">
-      <div className="content">
-        {newsData.map((newss, index) => (
-          <div key={newss.url} className="items w-full">
-            <div className="box bg-white flex relative my-4 shadow-md">
-              <div className="images relative h-40 w-1/4">
-                <div className="img h-full">
-                  <img
-                    src={newss.urlToImage}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
+    <div>
+      <section className="popular">
+        <div className="content">
+          {newsData.map((newss, index) => (
+            <div key={newss.url} className="items w-full">
+              <div className="box bg-white flex relative my-4 shadow-md">
+                <div className="images relative h-40 w-1/4">
+                  <div className="img h-full">
+                    <img
+                      src={newss.urlToImage}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="category category1 absolute top-0 left-0 p-2">
+                    <span>{newss.source.name}</span>
+                  </div>
                 </div>
-                <div className="category category1 absolute top-0 left-0 p-2">
-                  <span>{newss.source.name}</span>
-                </div>
-              </div>
-              <div className="text flex flex-col justify-between p-2 w-3/4">
-                <h1 className="m-0">{newss.title}...</h1>
-                <div className="date flex items-center">
-                  <i className="fas fa-calendar-days mr-1"></i>
-                  <label>{newss.publishedAt}</label>
-                  <a href={newss.url}>
-                    <button className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-8 rounded">
-                      lol
-                    </button>
-                  </a>
-                </div>
-                <div className="comment flex items-center border-t border-gray-300 pt-2">
-                  <i className="fas fa-comments mr-1"></i>
-                  <label>{newss.description}</label>
+                <div className="text flex flex-col justify-between p-2 w-3/4">
+                  <h1 className="m-0 text-xl">{newss.title}...</h1>
+                  <div className="date flex items-center">
+                    <i className="fas fa-calendar-days mr-1"></i>
+                    <label>{newss.publishedAt}</label>
+                    
+                      <button
+                        className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-8 rounded"
+                        onClick={handleClick}
+                      >
+                        lol
+                      </button>
+                    
+                  </div>
+                  <div className="comment flex items-center border-t border-gray-300 pt-2">
+                    <i className="fas fa-comments mr-1"></i>
+                    <label>{newss.description}</label>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </section>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 };
 

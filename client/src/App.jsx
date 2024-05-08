@@ -1,20 +1,26 @@
 
-import Footer from "./components/footer"
-import Popular from "./components/popular"
+
 
 import './App.css'
-
+import { Routes, Route } from "react-router-dom";
+import Newsland from "./pages/newsland.jsx";
+import Homepage from './pages/homepage';
 
 
 import React from 'react'
 
 export default function App() {
   return (
-
     <div>
-  
-       <Popular/>
+
       
-      </div>
-  )
+        <Routes>
+          <Route path="/spec-news" element={<Newsland />} />
+          <Route path='/' element={<Homepage />}/>
+        </Routes>
+      
+
+      
+    </div>
+  );
 }

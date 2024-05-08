@@ -9,6 +9,7 @@ export const gennews= async (req,res,next)=>{
    await fetch(req).then(function (response) {
       return response.json();
     }).then((data)=>{
+      
        res.send(JSON.stringify(data));
     });
 
