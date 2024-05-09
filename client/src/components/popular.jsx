@@ -5,17 +5,50 @@ import "slick-carousel/slick/slick-theme.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 
-
 const Popular = () => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [Searchactivated,setSearchactivated]=useState(false);
+  
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   
 
-  const handleClick=()=>{
+  
+
+  const handleClick=(news)=>{
+    dispatch(SelectedNews(news))
     
-navigate("/spec-news");
+    
+  }
+
+  async function getsearchedNewsData(searched){
+    
+    try {
+      
+      
+      const res = await fetch(
+        "http://localhost:3001/server/news/specificnews",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            
+            searchedkey: searched,
+          }),
+        }
+      );
+      const data = await res.json();
+      
+      setNewsData(data.articles);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+
   }
   async function getNewsData() {
     try {
@@ -28,6 +61,7 @@ navigate("/spec-news");
         body: JSON.stringify({ country: `${country}` }),
       });
       const data = await res.json();
+      
       setNewsData(data.articles);
       setLoading(false);
     } catch (error) {
@@ -37,8 +71,19 @@ navigate("/spec-news");
   }
 
   useEffect(() => {
-    getNewsData();
+    if(!Searchactivated){
+      getNewsData();
+
+    }
+    
+  
   }, []);
+  useEffect(()=>{
+    
+      getsearchedNewsData(search)
+    
+  },[Searchactivated]);
+    
   
 
 
@@ -49,12 +94,20 @@ navigate("/spec-news");
       </div>
     );
   }
-
+  
   return (
     <div>
+      <input type="search" name="" id="" onChange={(e)=>{
+        setSearch(e.target.value)
+      }}/>
+      <button onClick={()=>{
+        getsearchedNewsData(search)
+        setSearchactivated(true);
+      }}>Search</button>
+
       <section className="popular">
         <div className="content">
-          {newsData.map((newss, index) => (
+          {newsData?.map((newss, index) => (
             <div key={newss.url} className="items w-full">
               <div className="box bg-white flex relative my-4 shadow-md">
                 <div className="images relative h-40 w-1/4">
@@ -77,7 +130,9 @@ navigate("/spec-news");
                     
                       <button
                         className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-8 rounded"
-                        onClick={handleClick}
+                        onClick={()=>{
+                          navigate("spec-news",{state:{data:newss}});
+                        }}
                       >
                         lol
                       </button>
